@@ -9,4 +9,4 @@ Installation, setup and usage
 3. In your editor open: jquery-mediabox/example/index.html
 4. Read the code and try the demo
 
-A more verbose version of this document will follow :D
+A more verbose version of this document will follow!
