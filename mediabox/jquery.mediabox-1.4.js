@@ -1,12 +1,11 @@
 /*
- * FancyBox - jQuery Plugin
- * Simple and fancy lightbox alternative
- * 
- * Copyright (c) of changes from 1.3.4 to 1.4 2012 Lenz Hirsch
+ * mediabox - jQuery Plugin
  *
- * Copyright (c) of Version 1.3.4 2008 - 2010 Janis Skarnelis 
- * 
- * Improvements in 1.4: 
+ * Copyright (c) 2012 - Lenz Hirsch
+ *
+ * Forked from Janis Skarnelis Fancybox 1.3.4
+ *
+ * Improvements in 1.4:
  * - Working auto recognition for flash players
  * - Better browser support for flash players
  * - JSLint compliance
@@ -15,9 +14,8 @@
  * Version: 1.4 (09/06/2012)
  * Requires: jQuery v1.3+
  *
- * Dual licensed under the MIT and GPL licenses:
+ * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
  */
 
 (function($) {
@@ -61,7 +59,7 @@
             selectedOpts.width = 'auto';
             selectedOpts.height = 'auto';
 
-            tmp.html( '<p id="fancybox-error">The requested content cannot be loaded.<br />Please try again later.</p>' );
+            tmp.html( '<p id="mediabox-error">The requested content cannot be loaded.<br />Please try again later.</p>' );
 
             _process_inline();
         },
@@ -77,7 +75,7 @@
 
             _abort();
 
-            selectedOpts = $.extend({}, $.fn.fancybox.defaults, (typeof $(obj).data('fancybox') == 'undefined' ? selectedOpts : $(obj).data('fancybox')));
+            selectedOpts = $.extend({}, $.fn.mediabox.defaults, (typeof $(obj).data('mediabox') == 'undefined' ? selectedOpts : $(obj).data('mediabox')));
 
             ret = selectedOpts.onStart(selectedArray, selectedIndex, selectedOpts);
 
@@ -168,7 +166,7 @@
 
             tmp.css('padding', (selectedOpts.padding + selectedOpts.margin));
 
-            $('.fancybox-inline-tmp').unbind('fancybox-cancel').bind('fancybox-change', function() {
+            $('.mediabox-inline-tmp').unbind('mediabox-cancel').bind('mediabox-change', function() {
                 $(this).replaceWith(content.children());
             });
 
@@ -179,17 +177,17 @@
                 break;
 
                 case 'inline' :
-                    if ( $(obj).parent().is('#fancybox-content') === true) {
+                    if ( $(obj).parent().is('#mediabox-content') === true) {
                         busy = false;
                         return;
                     }
 
-                    $('<div class="fancybox-inline-tmp" />')
+                    $('<div class="mediabox-inline-tmp" />')
                         .hide()
                         .insertBefore( $(obj) )
-                        .bind('fancybox-cleanup', function() {
+                        .bind('mediabox-cleanup', function() {
                             $(this).replaceWith(content.children());
-                        }).bind('fancybox-cancel', function() {
+                        }).bind('mediabox-cancel', function() {
                             $(this).replaceWith(tmp.children());
                         });
 
@@ -201,7 +199,7 @@
                 case 'image':
                     busy = false;
 
-                    $.fancybox.showActivity();
+                    $.mediabox.showActivity();
 
                     imgPreloader = new Image();
 
@@ -240,7 +238,7 @@
                 case 'ajax':
                     busy = false;
 
-                    $.fancybox.showActivity();
+                    $.mediabox.showActivity();
 
                     selectedOpts.ajax.win = selectedOpts.ajax.success;
 
@@ -312,7 +310,7 @@
             selectedOpts.height = imgPreloader.height;
 
             $("<img />").attr({
-                'id' : 'fancybox-img',
+                'id' : 'mediabox-img',
                 'src' : imgPreloader.src,
                 'alt' : selectedOpts.title
             }).appendTo( tmp );
@@ -326,7 +324,7 @@
             loading.hide();
 
             if (wrap.is(":visible") && false === currentOpts.onCleanup(currentArray, currentIndex, currentOpts)) {
-                $.event.trigger('fancybox-cancel');
+                $.event.trigger('mediabox-cancel');
 
                 busy = false;
                 return;
@@ -357,9 +355,9 @@
 
                 if (!overlay.is(':visible')) {
                     if (isIE6) {
-                        $('select:not(#fancybox-tmp select)').filter(function() {
+                        $('select:not(#mediabox-tmp select)').filter(function() {
                             return this.style.visibility !== 'hidden';
-                        }).css({'visibility' : 'hidden'}).one('fancybox-cleanup', function() {
+                        }).css({'visibility' : 'hidden'}).one('mediabox-cleanup', function() {
                             this.style.visibility = 'inherit';
                         });
                     }
@@ -393,7 +391,7 @@
                         content.html( tmp.contents() ).fadeTo(currentOpts.changeFade, 1, _finish);
                     };
 
-                    $.event.trigger('fancybox-change');
+                    $.event.trigger('mediabox-change');
 
                     content
                         .empty()
@@ -468,10 +466,10 @@
         _format_title = function(title) {
             if (title && title.length) {
                 if (currentOpts.titlePosition == 'float') {
-                    return '<p class="fancybox-title-text">' + title + '</p>';
+                    return '<p class="mediabox-title-text">' + title + '</p>';
                 }
 
-                return '<div id="fancybox-title-' + currentOpts.titlePosition + '">' + title + '</div>';
+                return '<div id="mediabox-title-' + currentOpts.titlePosition + '">' + title + '</div>';
             }
 
             return false;
@@ -499,7 +497,7 @@
             }
 
             title
-                .addClass('fancybox-title-' + currentOpts.titlePosition)
+                .addClass('mediabox-title-' + currentOpts.titlePosition)
                 .html( titleStr )
                 .appendTo( 'body' )
                 .show();
@@ -555,11 +553,11 @@
                 $(document).bind('keydown.fb', function(e) {
                     if (e.keyCode == 27 && currentOpts.enableEscapeButton) {
                         e.preventDefault();
-                        $.fancybox.close();
+                        $.mediabox.close();
 
                     } else if ((e.keyCode == 37 || e.keyCode == 39) && currentOpts.enableKeyboardNav && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
                         e.preventDefault();
-                        $.fancybox[ e.keyCode == 37 ? 'prev' : 'next']();
+                        $.mediabox[ e.keyCode == 37 ? 'prev' : 'next']();
                     }
                 });
             }
@@ -602,28 +600,28 @@
             _set_navigation();
     
             if (currentOpts.hideOnContentClick) {
-                content.bind('click', $.fancybox.close);
+                content.bind('click', $.mediabox.close);
             }
 
             if (currentOpts.hideOnOverlayClick) {
-                overlay.bind('click', $.fancybox.close);
+                overlay.bind('click', $.mediabox.close);
             }
 
-            $(window).bind("resize.fb", $.fancybox.resize);
+            $(window).bind("resize.fb", $.mediabox.resize);
 
             if (currentOpts.centerOnScroll) {
-                $(window).bind("scroll.fb", $.fancybox.center);
+                $(window).bind("scroll.fb", $.mediabox.center);
             }
 
             if (currentOpts.type == 'iframe') {
-                $('<iframe id="fancybox-frame" name="fancybox-frame' + new Date().getTime() + '" frameborder="0" hspace="0" ' + ($.browser.msie ? 'allowtransparency="true""' : '') + ' scrolling="' + selectedOpts.scrolling + '" src="' + currentOpts.href + '"></iframe>').appendTo(content);
+                $('<iframe id="mediabox-frame" name="mediabox-frame' + new Date().getTime() + '" frameborder="0" hspace="0" ' + ($.browser.msie ? 'allowtransparency="true""' : '') + ' scrolling="' + selectedOpts.scrolling + '" src="' + currentOpts.href + '"></iframe>').appendTo(content);
             }
 
             wrap.show();
 
             busy = false;
 
-            $.fancybox.center();
+            $.mediabox.center();
 
             currentOpts.onComplete(currentArray, currentIndex, currentOpts);
 
@@ -788,13 +786,13 @@
      * Public methods
      */
 
-    $.fn.fancybox = function(options) {
+    $.fn.mediabox = function(options) {
         if (!$(this).length) {
             return this;
         }
 
         $(this)
-            .data('fancybox', $.extend({}, options, ($.metadata ? $(this).metadata() : {})))
+            .data('mediabox', $.extend({}, options, ($.metadata ? $(this).metadata() : {})))
             .unbind('click.fb')
             .bind('click.fb', function(e) {
                 e.preventDefault();
@@ -828,7 +826,7 @@
         return this;
     };
 
-    $.fancybox = function(obj) {
+    $.mediabox = function(obj) {
         var opts;
 
         if (busy) {
@@ -844,9 +842,9 @@
         if ($.isArray(obj)) {
             for (var i = 0, j = obj.length; i < j; i++) {
                 if (typeof obj[i] == 'object') {
-                    $(obj[i]).data('fancybox', $.extend({}, opts, obj[i]));
+                    $(obj[i]).data('mediabox', $.extend({}, opts, obj[i]));
                 } else {
-                    obj[i] = $({}).data('fancybox', $.extend({content : obj[i]}, opts));
+                    obj[i] = $({}).data('mediabox', $.extend({content : obj[i]}, opts));
                 }
             }
 
@@ -854,9 +852,9 @@
 
         } else {
             if (typeof obj == 'object') {
-                $(obj).data('fancybox', $.extend({}, opts, obj));
+                $(obj).data('mediabox', $.extend({}, opts, obj));
             } else {
-                obj = $({}).data('fancybox', $.extend({content : obj}, opts));
+                obj = $({}).data('mediabox', $.extend({content : obj}, opts));
             }
 
             selectedArray.push(obj);
@@ -869,26 +867,26 @@
         _start();
     };
 
-    $.fancybox.showActivity = function() {
+    $.mediabox.showActivity = function() {
         clearInterval(loadingTimer);
 
         loading.show();
         loadingTimer = setInterval(_animate_loading, 66);
     };
 
-    $.fancybox.hideActivity = function() {
+    $.mediabox.hideActivity = function() {
         loading.hide();
     };
 
-    $.fancybox.next = function() {
-        return $.fancybox.pos( currentIndex + 1);
+    $.mediabox.next = function() {
+        return $.mediabox.pos( currentIndex + 1);
     };
 
-    $.fancybox.prev = function() {
-        return $.fancybox.pos( currentIndex - 1);
+    $.mediabox.prev = function() {
+        return $.mediabox.pos( currentIndex - 1);
     };
 
-    $.fancybox.pos = function(pos) {
+    $.mediabox.pos = function(pos) {
         if (busy) {
             return;
         }
@@ -909,14 +907,14 @@
         return;
     };
 
-    $.fancybox.cancel = function() {
+    $.mediabox.cancel = function() {
         if (busy) {
             return;
         }
 
         busy = true;
 
-        $.event.trigger('fancybox-cancel');
+        $.event.trigger('mediabox-cancel');
 
         _abort();
 
@@ -925,8 +923,8 @@
         busy = false;
     };
 
-    // Note: within an iframe use - parent.$.fancybox.close();
-    $.fancybox.close = function() {
+    // Note: within an iframe use - parent.$.mediabox.close();
+    $.mediabox.close = function() {
         if (busy || wrap.is(':hidden')) {
             return;
         }
@@ -960,7 +958,7 @@
             title.empty().hide();
             wrap.hide();
 
-            $.event.trigger('fancybox-cleanup');
+            $.event.trigger('mediabox-cleanup');
 
             content.empty();
 
@@ -1005,15 +1003,15 @@
         }
     };
 
-    $.fancybox.resize = function() {
+    $.mediabox.resize = function() {
         if (overlay.is(':visible')) {
             overlay.css('height', $(document).height());
         }
 
-        $.fancybox.center(true);
+        $.mediabox.center(true);
     };
 
-    $.fancybox.center = function() {
+    $.mediabox.center = function() {
         var view, align;
 
         if (busy) {
@@ -1035,42 +1033,42 @@
             }, typeof arguments[0] == 'number' ? arguments[0] : 200);
     };
 
-    $.fancybox.init = function() {
-        if ($("#fancybox-wrap").length) {
+    $.mediabox.init = function() {
+        if ($("#mediabox-wrap").length) {
             return;
         }
 
         $('body').append(
-            tmp = $('<div id="fancybox-tmp"></div>'),
-            loading = $('<div id="fancybox-loading"><div></div></div>'),
-            overlay = $('<div id="fancybox-overlay"></div>'),
-            wrap = $('<div id="fancybox-wrap"></div>')
+            tmp = $('<div id="mediabox-tmp"></div>'),
+            loading = $('<div id="mediabox-loading"><div></div></div>'),
+            overlay = $('<div id="mediabox-overlay"></div>'),
+            wrap = $('<div id="mediabox-wrap"></div>')
         );
 
-        outer = $('<div id="fancybox-outer"></div>')
-            .append('<div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div>')
+        outer = $('<div id="mediabox-outer"></div>')
+            .append('<div class="mediabox-bg" id="mediabox-bg-n"></div><div class="mediabox-bg" id="mediabox-bg-ne"></div><div class="mediabox-bg" id="mediabox-bg-e"></div><div class="mediabox-bg" id="mediabox-bg-se"></div><div class="mediabox-bg" id="mediabox-bg-s"></div><div class="mediabox-bg" id="mediabox-bg-sw"></div><div class="mediabox-bg" id="mediabox-bg-w"></div><div class="mediabox-bg" id="mediabox-bg-nw"></div>')
             .appendTo( wrap );
 
         outer.append(
-            content = $('<div id="fancybox-content"></div>'),
-            close = $('<a id="fancybox-close"></a>'),
-            title = $('<div id="fancybox-title"></div>'),
+            content = $('<div id="mediabox-content"></div>'),
+            close = $('<a id="mediabox-close"></a>'),
+            title = $('<div id="mediabox-title"></div>'),
 
-            nav_left = $('<a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a>'),
-            nav_right = $('<a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a>')
+            nav_left = $('<a href="javascript:;" id="mediabox-left"><span class="media-ico" id="mediabox-left-ico"></span></a>'),
+            nav_right = $('<a href="javascript:;" id="mediabox-right"><span class="media-ico" id="mediabox-right-ico"></span></a>')
         );
 
-        close.click($.fancybox.close);
-        loading.click($.fancybox.cancel);
+        close.click($.mediabox.close);
+        loading.click($.mediabox.cancel);
 
         nav_left.click(function(e) {
             e.preventDefault();
-            $.fancybox.prev();
+            $.mediabox.prev();
         });
 
         nav_right.click(function(e) {
             e.preventDefault();
-            $.fancybox.next();
+            $.mediabox.next();
         });
 
         if ($.fn.mousewheel) {
@@ -1080,24 +1078,24 @@
 
                 } else if ($(e.target).get(0).clientHeight === 0 || $(e.target).get(0).scrollHeight === $(e.target).get(0).clientHeight) {
                     e.preventDefault();
-                    $.fancybox[ delta > 0 ? 'prev' : 'next']();
+                    $.mediabox[ delta > 0 ? 'prev' : 'next']();
                 }
             });
         }
 
         if (!$.support.opacity) {
-            wrap.addClass('fancybox-ie');
+            wrap.addClass('mediabox-ie');
         }
 
         if (isIE6) {
-            loading.addClass('fancybox-ie6');
-            wrap.addClass('fancybox-ie6');
+            loading.addClass('mediabox-ie6');
+            wrap.addClass('mediabox-ie6');
 
-            $('<iframe id="fancybox-hide-sel-frame" src="' + (/^https/i.test(window.location.href || '') ? 'javascript:void(false)' : 'about:blank' ) + '" scrolling="no" border="0" frameborder="0" tabindex="-1"></iframe>').prependTo(outer);
+            $('<iframe id="mediabox-hide-sel-frame" src="' + (/^https/i.test(window.location.href || '') ? 'javascript:void(false)' : 'about:blank' ) + '" scrolling="no" border="0" frameborder="0" tabindex="-1"></iframe>').prependTo(outer);
         }
     };
 
-    $.fn.fancybox.defaults = {
+    $.fn.mediabox.defaults = {
         padding : 10,
         margin : 40,
         opacity : false,
@@ -1153,7 +1151,7 @@
     };
 
     $(document).ready(function() {
-        $.fancybox.init();
+        $.mediabox.init();
     });
 
 })(jQuery);
