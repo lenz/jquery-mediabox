@@ -1,1 +1,10 @@
-Put this on a web server and look into the examples of the demo (index.html).
+h1. Mixed galleries from images, mp4, Youtube and Vimeo sources
+
+h2. Installation, setup and usage
+
+# Copy the package into your web servers document root
+# In your browser go to the "examples" directory e.g. http://localhost/jquery-mediabox/example/
+# In your Editor open: jquery-mediabox/example/index.html
+# Read the code and try the demo
+
+A more verbose version of this document will follow :D
