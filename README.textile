@@ -4,7 +4,7 @@ h2. Installation, setup and usage
 
 # Copy the package into your web servers document root
 # In your browser go to the "examples" directory e.g. http://localhost/jquery-mediabox/example/
-# In your Editor open: jquery-mediabox/example/index.html
+# In your editor open: jquery-mediabox/example/index.html
 # Read the code and try the demo
 
 A more verbose version of this document will follow :D
